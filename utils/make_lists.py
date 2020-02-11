@@ -35,22 +35,27 @@ for s1 in os.listdir(image_dir):
                 image_sub_dir4 = os.path.join(image_sub_dir3, s4)
                 label_sub_dir4 = os.path.join(label_sub_dir3, s44)
                 if not os.path.exists(image_sub_dir4):
-                    print('image not exists',image_sub_dir4)
+                    print('image not exists', image_sub_dir4)
+                    continue
                 if not os.path.exists(label_sub_dir4):
-                    print('label not exists',label_sub_dir4)
+                    print('label not exists', label_sub_dir4)
+                    continue
                 # image和label的list中添加数据集
                 image_list.append(image_sub_dir4)
                 label_list.append(label_sub_dir4)
+
+assert len(image_list) == len(label_list)#判断两个列表长度是否一致
 print(len(image_list),len(label_list))
             
 save = pd.DataFrame({'image': image_list, 'label': label_list})
 save_shuffle = shuffle(save)
 
-#划分train、validation、test
+#划分train、validation、test 7：1:2
 length = len(save_shuffle)
 train = save_shuffle[0:int(length * 0.7)]
-test = save_shuffle[int(length * 0.7)+1:]
-#validation = train[0:length*0.1]
+test = save_shuffle[int(length * 0.7):int(length*0.9)]
+validation = save_shuffle[int(length*0.9):]
 
 train.to_csv('D:\\BaiduAILessons\\Project1\\LaneSegmentation_BaiduAI\\data_list\\train.csv', index=False)
 test.to_csv('D:\\BaiduAILessons\\Project1\\LaneSegmentation_BaiduAI\\data_list\\test.csv',index=False)
+validation.to_csv('D:\\BaiduAILessons\\Project1\\LaneSegmentation_BaiduAI\\data_list\\validation.csv',index = False)
